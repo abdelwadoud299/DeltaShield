@@ -1,0 +1,138 @@
+<svg width="1000" height="700" viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#555555"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b71c1c"/>
+    </marker>
+    <marker id="arrowBlack" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#222222"/>
+    </marker>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+    <style>
+      .title{font-family:'Segoe UI',Arial,sans-serif;font-size:20px;font-weight:700;fill:#222222;text-anchor:middle;}
+      .statename{font-family:'Segoe UI',Arial,sans-serif;font-size:13px;font-weight:700;text-anchor:middle;}
+      .label{font-family:'Segoe UI',Arial,sans-serif;font-size:11px;fill:#333333;text-anchor:middle;paint-order:stroke;stroke:#ffffff;stroke-width:4px;stroke-linejoin:round;}
+      .ledtext{font-family:'Segoe UI',Arial,sans-serif;font-size:9.5px;}
+      .small{font-family:'Segoe UI',Arial,sans-serif;font-size:9px;fill:#666666;text-anchor:middle;font-style:italic;}
+      .legend{font-family:'Segoe UI',Arial,sans-serif;font-size:10.5px;fill:#666666;text-anchor:middle;}
+      .edge{stroke:#555555;stroke-width:2;fill:none;}
+      .edge-dashed{stroke:#b71c1c;stroke-width:2;fill:none;stroke-dasharray:6,4;}
+      .hublabel{font-family:'Segoe UI',Arial,sans-serif;font-size:10.5px;font-style:italic;fill:#b71c1c;text-anchor:middle;paint-order:stroke;stroke:#ffffff;stroke-width:4px;stroke-linejoin:round;}
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1000" height="700" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="500" y="32" class="title">AgriBot-Vision — FSM State Transition Diagram</text>
+
+  <!-- ===================== ENTRY POINT ===================== -->
+  <text x="60" y="100" class="small">Start</text>
+  <circle cx="60" cy="120" r="8" fill="#222222"/>
+  <line x1="70" y1="120" x2="128" y2="120" class="edge" stroke="#222222" marker-end="url(#arrowBlack)"/>
+
+  <!-- ===================== EDGES (drawn first, under boxes) ===================== -->
+
+  <!-- INIT -> IDLE -->
+  <line x1="280" y1="120" x2="428" y2="120" class="edge" marker-end="url(#arrowGray)"/>
+  <text x="355" y="104" class="label">Sensors calibrated</text>
+
+  <!-- IDLE -> PATROL -->
+  <line x1="505" y1="152" x2="505" y2="286" class="edge" marker-end="url(#arrowGray)"/>
+  <text x="505" y="220" class="label">/start from dashboard</text>
+
+  <!-- PATROL -> TARGET_LOCK -->
+  <line x1="582" y1="308" x2="748" y2="308" class="edge" marker-end="url(#arrowGray)"/>
+  <text x="665" y="297" class="label">2-of-3 ML frames positive</text>
+
+  <!-- TARGET_LOCK -> PATROL -->
+  <line x1="748" y1="332" x2="582" y2="332" class="edge" marker-end="url(#arrowGray)"/>
+  <text x="665" y="349" class="label">Pump dwell complete</text>
+
+  <!-- PATROL -> OBSTACLE_EVADE -->
+  <line x1="428" y1="308" x2="292" y2="308" class="edge" marker-end="url(#arrowGray)"/>
+  <text x="360" y="297" class="label">HC-SR04 &lt; 20 cm</text>
+
+  <!-- OBSTACLE_EVADE -> PATROL -->
+  <line x1="292" y1="332" x2="428" y2="332" class="edge" marker-end="url(#arrowGray)"/>
+  <text x="360" y="349" class="label">Path clear</text>
+
+  <!-- PATROL -> SAFE_MODE -->
+  <line x1="505" y1="352" x2="505" y2="516" class="edge" marker-end="url(#arrowGray)"/>
+  <text x="505" y="434" class="label">Battery &lt; 6.8 V (5 reads)</text>
+
+  <!-- IDLE -> MANUAL_OVERRIDE -->
+  <line x1="582" y1="107" x2="758" y2="107" class="edge" marker-end="url(#arrowGray)"/>
+  <text x="670" y="93" class="label">/override from dashboard</text>
+
+  <!-- MANUAL_OVERRIDE -> IDLE -->
+  <line x1="758" y1="133" x2="582" y2="133" class="edge" marker-end="url(#arrowGray)"/>
+  <text x="670" y="150" class="label">/stop from dashboard</text>
+
+  <!-- Any state -> SAFE_MODE (central hub, dashed) -->
+  <rect x="595" y="422" width="110" height="36" rx="8" ry="8" fill="#fafafa" stroke="#b71c1c" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="650" y="444" class="hublabel">ANY STATE</text>
+  <line x1="650" y1="458" x2="562" y2="514" class="edge-dashed" marker-end="url(#arrowRed)"/>
+  <text x="628" y="493" class="hublabel">/stop from dashboard</text>
+
+  <!-- ===================== STATE BOXES ===================== -->
+
+  <!-- INIT -->
+  <rect x="130" y="88" width="150" height="64" rx="14" ry="14" fill="#cfe9fb" stroke="#4a90c4" stroke-width="2" filter="url(#shadow)"/>
+  <text x="205" y="112" class="statename" fill="#1a4d75">INIT</text>
+  <circle cx="175" cy="136" r="4" fill="none" stroke="#888888" stroke-width="1.5"/>
+  <text x="183" y="139" class="ledtext" fill="#555555">OFF</text>
+
+  <!-- IDLE -->
+  <rect x="430" y="88" width="150" height="64" rx="14" ry="14" fill="#e0e0e0" stroke="#888888" stroke-width="2" filter="url(#shadow)"/>
+  <text x="505" y="112" class="statename" fill="#333333">IDLE</text>
+  <circle cx="475" cy="136" r="4" fill="none" stroke="#888888" stroke-width="1.5"/>
+  <text x="483" y="139" class="ledtext" fill="#555555">OFF</text>
+
+  <!-- MANUAL_OVERRIDE -->
+  <rect x="760" y="88" width="170" height="64" rx="14" ry="14" fill="#d9b3ff" stroke="#8e44ad" stroke-width="2" filter="url(#shadow)"/>
+  <text x="845" y="112" class="statename" fill="#4a1a63">MANUAL_OVERRIDE</text>
+  <circle cx="815" cy="136" r="4" fill="#8e44ad">
+    <animate attributeName="opacity" values="1;0.15;1" dur="0.5s" repeatCount="indefinite"/>
+  </circle>
+  <text x="823" y="139" class="ledtext" fill="#4a1a63">medium (500ms)</text>
+
+  <!-- OBSTACLE_EVADE -->
+  <rect x="120" y="288" width="170" height="64" rx="14" ry="14" fill="#ffd8a8" stroke="#ff9800" stroke-width="2" filter="url(#shadow)"/>
+  <text x="205" y="312" class="statename" fill="#8a4c00">OBSTACLE_EVADE</text>
+  <circle cx="175" cy="336" r="4" fill="#ff9800">
+    <animate attributeName="opacity" values="1;0.15;1" dur="0.25s" repeatCount="indefinite"/>
+  </circle>
+  <text x="183" y="339" class="ledtext" fill="#8a4c00">fast (250ms)</text>
+
+  <!-- PATROL -->
+  <rect x="430" y="288" width="150" height="64" rx="14" ry="14" fill="#a8e6a1" stroke="#4caf50" stroke-width="2" filter="url(#shadow)"/>
+  <text x="505" y="312" class="statename" fill="#1e5c20">PATROL</text>
+  <circle cx="475" cy="336" r="4" fill="#4caf50">
+    <animate attributeName="opacity" values="1;0.15;1" dur="1s" repeatCount="indefinite"/>
+  </circle>
+  <text x="483" y="339" class="ledtext" fill="#1e5c20">slow (1s)</text>
+
+  <!-- TARGET_LOCK -->
+  <rect x="750" y="288" width="160" height="64" rx="14" ry="14" fill="#ffb3b3" stroke="#e53935" stroke-width="2" filter="url(#shadow)"/>
+  <text x="830" y="312" class="statename" fill="#7a1010">TARGET_LOCK</text>
+  <circle cx="800" cy="336" r="4" fill="#e53935"/>
+  <text x="808" y="339" class="ledtext" fill="#7a1010">solid ON</text>
+
+  <!-- SAFE_MODE -->
+  <rect x="430" y="518" width="150" height="64" rx="14" ry="14" fill="#8b1a1a" stroke="#5c0f0f" stroke-width="2" filter="url(#shadow)"/>
+  <text x="505" y="542" class="statename" fill="#ffffff">SAFE_MODE</text>
+  <circle cx="475" cy="566" r="4" fill="#ffffff" stroke="#b71c1c" stroke-width="1.5">
+    <animate attributeName="opacity" values="1;0.1;1" dur="0.1s" repeatCount="indefinite"/>
+  </circle>
+  <text x="483" y="569" class="ledtext" fill="#ffe0e0">strobe (100ms)</text>
+
+  <!-- ===================== LEGEND ===================== -->
+  <text x="500" y="650" class="legend">LED indicators show each state's blink pattern — hollow circle = OFF, filled circle blinks at the interval shown.</text>
+
+</svg>

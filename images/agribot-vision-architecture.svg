@@ -1,0 +1,235 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" width="1200" height="820" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="aD" markerWidth="12" markerHeight="8" refX="12" refY="4" orient="auto"><polygon points="0 0,12 4,0 8" fill="#222"/></marker>
+    <marker id="aRed" markerWidth="12" markerHeight="8" refX="12" refY="4" orient="auto"><polygon points="0 0,12 4,0 8" fill="#c0392b"/></marker>
+    <marker id="aBlue" markerWidth="12" markerHeight="8" refX="12" refY="4" orient="auto"><polygon points="0 0,12 4,0 8" fill="#2471a3"/></marker>
+    <marker id="aTeal" markerWidth="12" markerHeight="8" refX="0" refY="4" orient="auto"><polygon points="12 0,0 4,12 8" fill="#117a65"/></marker>
+    <filter id="sh" x="-2%" y="-2%" width="104%" height="104%"><feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.15"/></filter>
+  </defs>
+
+  <!-- Canvas -->
+  <rect width="1200" height="820" rx="12" fill="#f4f5f7"/>
+
+  <!-- Title -->
+  <text x="600" y="38" text-anchor="middle" font-size="24" font-weight="bold" fill="#1a1a2e">AgriBot-Vision — Firmware Architecture</text>
+  <text x="600" y="60" text-anchor="middle" font-size="13" fill="#666">ESP32-CAM · Layered Stack Diagram</text>
+
+  <!-- ================================================ -->
+  <!-- DEDICATED BUS LANES (tinted backgrounds)          -->
+  <!-- ================================================ -->
+  <!-- Left lane: Config (teal) -->
+  <rect x="16" y="75" width="78" height="660" rx="8" fill="#e8f8f5" stroke="#a3d9cc" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="55" y="92" text-anchor="middle" font-size="9" font-weight="bold" fill="#117a65">CONFIG</text>
+  <text x="55" y="104" text-anchor="middle" font-size="8" fill="#117a65">BUS</text>
+
+  <!-- Right lane: HW Commands (red) -->
+  <rect x="1106" y="75" width="78" height="660" rx="8" fill="#fdedec" stroke="#f1a9a0" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="1145" y="92" text-anchor="middle" font-size="9" font-weight="bold" fill="#c0392b">HW CMD</text>
+  <text x="1145" y="104" text-anchor="middle" font-size="8" fill="#c0392b">BUS</text>
+
+  <!-- ================================================ -->
+  <!-- GROUP 1: Layer background bands                    -->
+  <!-- ================================================ -->
+  <g id="layer-bgs">
+    <rect x="110" y="75"  width="980" height="108" rx="8" fill="#d0e8f7" stroke="#a0c4e8" stroke-width="1"/>
+    <rect x="110" y="200" width="980" height="140" rx="8" fill="#d5f5e3" stroke="#a9dfbf" stroke-width="1"/>
+    <rect x="110" y="357" width="980" height="122" rx="8" fill="#fef9e7" stroke="#f9e79f" stroke-width="1"/>
+    <rect x="110" y="496" width="980" height="122" rx="8" fill="#fdebd0" stroke="#f5cba7" stroke-width="1"/>
+    <rect x="110" y="635" width="980" height="100" rx="8" fill="#eaecee" stroke="#d5d8dc" stroke-width="1"/>
+  </g>
+
+  <!-- ================================================ -->
+  <!-- GROUP 2: Arrows (BEHIND cards)                     -->
+  <!-- ================================================ -->
+  <g id="arrows">
+
+    <!-- ── A) L1 <-> L2: Bidirectional ── -->
+    <line x1="560" y1="183" x2="560" y2="200" stroke="#c0392b" stroke-width="3" marker-end="url(#aRed)"/>
+    <line x1="640" y1="200" x2="640" y2="183" stroke="#2471a3" stroke-width="3" marker-end="url(#aBlue)"/>
+
+    <!-- ── B) L2 -> L3: Direct call ── -->
+    <line x1="600" y1="340" x2="600" y2="385" stroke="#222" stroke-width="3" marker-end="url(#aD)"/>
+
+    <!-- ── C) FSM -> HAL: RED BUS on RIGHT lane ── -->
+    <!-- Exit FSM right side into right bus lane -->
+    <line x1="890" y1="290" x2="1090" y2="290" stroke="#c0392b" stroke-width="3.5"/>
+    <!-- Trunk runs down right lane -->
+    <line x1="1145" y1="290" x2="1145" y2="524" stroke="#c0392b" stroke-width="3.5"/>
+    <!-- Horizontal connector from entry to trunk -->
+    <line x1="1090" y1="290" x2="1145" y2="290" stroke="#c0392b" stroke-width="3.5"/>
+    <!-- Fan-out to 5 HAL boxes (branch from trunk, horizontal into diagram) -->
+    <!-- motor_control -->
+    <line x1="1145" y1="540" x2="1120" y2="540" stroke="#c0392b" stroke-width="2.5"/>
+    <line x1="1120" y1="540" x2="1120" y2="524" stroke="#c0392b" stroke-width="2.5"/>
+    <line x1="1120" y1="524" x2="1110" y2="524" stroke="#c0392b" stroke-width="2.5" marker-end="url(#aRed)"/>
+    <!-- sensors -->
+    <line x1="1145" y1="550" x2="1105" y2="550" stroke="#c0392b" stroke-width="2.5"/>
+    <line x1="1105" y1="550" x2="1105" y2="528" stroke="#c0392b" stroke-width="2.5"/>
+    <line x1="1105" y1="528" x2="1095" y2="528" stroke="#c0392b" stroke-width="2.5" marker-end="url(#aRed)"/>
+    <!-- relay -->
+    <line x1="1145" y1="560" x2="1090" y2="560" stroke="#c0392b" stroke-width="2.5"/>
+    <line x1="1090" y1="560" x2="1090" y2="532" stroke="#c0392b" stroke-width="2.5"/>
+    <line x1="1090" y1="532" x2="1080" y2="532" stroke="#c0392b" stroke-width="2.5" marker-end="url(#aRed)"/>
+    <!-- ml_inference -->
+    <line x1="1145" y1="570" x2="1075" y2="570" stroke="#c0392b" stroke-width="2.5"/>
+    <line x1="1075" y1="570" x2="1075" y2="536" stroke="#c0392b" stroke-width="2.5"/>
+    <line x1="1075" y1="536" x2="1065" y2="536" stroke="#c0392b" stroke-width="2.5" marker-end="url(#aRed)"/>
+    <!-- pcf8574 -->
+    <line x1="1145" y1="580" x2="1060" y2="580" stroke="#c0392b" stroke-width="2.5"/>
+    <line x1="1060" y1="580" x2="1060" y2="540" stroke="#c0392b" stroke-width="2.5"/>
+    <line x1="1060" y1="540" x2="1050" y2="540" stroke="#c0392b" stroke-width="2.5" marker-end="url(#aRed)"/>
+
+    <!-- Small red dots at branch points on trunk -->
+    <circle cx="1145" cy="540" r="3" fill="#c0392b"/>
+    <circle cx="1145" cy="550" r="3" fill="#c0392b"/>
+    <circle cx="1145" cy="560" r="3" fill="#c0392b"/>
+    <circle cx="1145" cy="570" r="3" fill="#c0392b"/>
+    <circle cx="1145" cy="580" r="3" fill="#c0392b"/>
+
+    <!-- ── D) pins.h -> FSM: TEAL BUS on LEFT lane ── -->
+    <!-- Exit pins.h left side into left bus lane -->
+    <line x1="180" y1="680" x2="55" y2="680" stroke="#117a65" stroke-width="3" stroke-dasharray="6,3"/>
+    <!-- Trunk runs up left lane -->
+    <line x1="55" y1="680" x2="55" y2="280" stroke="#117a65" stroke-width="3" stroke-dasharray="6,3"/>
+    <!-- Enter FSM from left -->
+    <line x1="55" y1="280" x2="110" y2="280" stroke="#117a65" stroke-width="3" stroke-dasharray="6,3" marker-end="url(#aTeal)"/>
+
+    <!-- ── E) pins.h -> HAL: TEAL branches from LEFT lane ── -->
+    <!-- Branch from trunk at y=555, go right into each HAL box -->
+    <circle cx="55" cy="540" r="3" fill="#117a65"/>
+    <circle cx="55" cy="550" r="3" fill="#117a65"/>
+    <circle cx="55" cy="560" r="3" fill="#117a65"/>
+    <circle cx="55" cy="570" r="3" fill="#117a65"/>
+    <circle cx="55" cy="580" r="3" fill="#117a65"/>
+
+    <line x1="55" y1="540" x2="90" y2="540" stroke="#117a65" stroke-width="2" stroke-dasharray="5,3"/>
+    <line x1="90" y1="540" x2="90" y2="524" stroke="#117a65" stroke-width="2" stroke-dasharray="5,3"/>
+    <line x1="90" y1="524" x2="110" y2="524" stroke="#117a65" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#aTeal)"/>
+
+    <line x1="55" y1="550" x2="82" y2="550" stroke="#117a65" stroke-width="2" stroke-dasharray="5,3"/>
+    <line x1="82" y1="550" x2="82" y2="528" stroke="#117a65" stroke-width="2" stroke-dasharray="5,3"/>
+    <line x1="82" y1="528" x2="100" y2="528" stroke="#117a65" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#aTeal)"/>
+
+    <line x1="55" y1="560" x2="74" y2="560" stroke="#117a65" stroke-width="2" stroke-dasharray="5,3"/>
+    <line x1="74" y1="560" x2="74" y2="532" stroke="#117a65" stroke-width="2" stroke-dasharray="5,3"/>
+    <line x1="74" y1="532" x2="93" y2="532" stroke="#117a65" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#aTeal)"/>
+
+    <!-- ── Arrow Labels with pill backgrounds ── -->
+    <!-- L1<->L2 -->
+    <rect x="460" y="186" width="86" height="16" rx="8" fill="#fff" fill-opacity="0.9" stroke="#c0392b" stroke-width="0.8"/>
+    <text x="503" y="197" text-anchor="middle" font-size="9" font-weight="bold" fill="#c0392b">commands ↓</text>
+    <rect x="654" y="186" width="80" height="16" rx="8" fill="#fff" fill-opacity="0.9" stroke="#2471a3" stroke-width="0.8"/>
+    <text x="694" y="197" text-anchor="middle" font-size="9" font-weight="bold" fill="#2471a3">↑ telemetry</text>
+
+    <!-- L2->L3 -->
+    <rect x="612" y="355" width="130" height="16" rx="8" fill="#fff" fill-opacity="0.9" stroke="#222" stroke-width="0.8"/>
+    <text x="677" y="366" text-anchor="middle" font-size="9" fill="#222">calls pure functions ↓</text>
+
+    <!-- FSM -> HAL bus label -->
+    <g transform="translate(1165,440) rotate(90)">
+      <rect x="-60" y="-12" width="120" height="16" rx="8" fill="#fff" fill-opacity="0.9" stroke="#c0392b" stroke-width="0.8"/>
+      <text x="0" y="0" text-anchor="middle" font-size="9" font-weight="bold" fill="#c0392b">FSM → HAL commands</text>
+    </g>
+
+    <!-- Config bus label -->
+    <g transform="translate(35,480) rotate(-90)">
+      <rect x="-50" y="-12" width="100" height="16" rx="8" fill="#fff" fill-opacity="0.9" stroke="#117a65" stroke-width="0.8"/>
+      <text x="0" y="0" text-anchor="middle" font-size="9" font-weight="bold" fill="#117a65">pins.h → config ↑</text>
+    </g>
+  </g>
+
+  <!-- ================================================ -->
+  <!-- GROUP 3: Content cards (ON TOP of arrows)         -->
+  <!-- ================================================ -->
+  <g id="cards">
+    <rect x="180" y="100" width="820" height="70" rx="6" fill="#2980b9" filter="url(#sh)"/>
+    <rect x="180" y="225" width="820" height="105" rx="6" fill="#27ae60" filter="url(#sh)"/>
+    <rect x="180" y="385" width="820" height="82" rx="6" fill="#f1c40f" filter="url(#sh)"/>
+    <!-- 5 HAL boxes -->
+    <rect x="120" y="524" width="180" height="82" rx="6" fill="#e67e22" filter="url(#sh)"/>
+    <rect x="312" y="524" width="180" height="82" rx="6" fill="#e67e22" filter="url(#sh)"/>
+    <rect x="504" y="524" width="180" height="82" rx="6" fill="#e67e22" filter="url(#sh)"/>
+    <rect x="696" y="524" width="180" height="82" rx="6" fill="#e67e22" filter="url(#sh)"/>
+    <rect x="888" y="524" width="162" height="82" rx="6" fill="#e67e22" filter="url(#sh)"/>
+    <!-- L5 -->
+    <rect x="180" y="660" width="820" height="60" rx="6" fill="#566573" filter="url(#sh)"/>
+  </g>
+
+  <!-- ================================================ -->
+  <!-- GROUP 4: Text labels (TOPMOST)                     -->
+  <!-- ================================================ -->
+  <g id="labels">
+    <!-- Layer titles -->
+    <text x="132" y="95"  font-size="11" font-weight="bold" fill="#1a5276" letter-spacing="1">LAYER 1 — WEB INTERFACE LAYER</text>
+    <text x="132" y="220" font-size="11" font-weight="bold" fill="#1e8449" letter-spacing="1">LAYER 2 — FSM ORCHESTRATOR</text>
+    <text x="132" y="377" font-size="11" font-weight="bold" fill="#7d6608" letter-spacing="1">LAYER 3 — DECISION LOGIC</text>
+    <text x="132" y="516" font-size="11" font-weight="bold" fill="#784212" letter-spacing="1">LAYER 4 — HARDWARE ABSTRACTION (HAL)</text>
+    <text x="132" y="655" font-size="11" font-weight="bold" fill="#2c3e50" letter-spacing="1">LAYER 5 — CONFIGURATION</text>
+
+    <!-- L1 -->
+    <text x="200" y="122" font-size="14" font-weight="bold" fill="#fff">wifi_server.h</text>
+    <text x="200" y="142" font-size="10.5" fill="#e8f4fd">WiFi AP · REST API (/start /stop /status /override) · Browser dashboard at 192.168.4.1</text>
+    <text x="200" y="158" font-size="9" fill="#aed6f1" font-style="italic">Uses volatile flags for thread-safe state requests</text>
+
+    <!-- L2 -->
+    <text x="200" y="248" font-size="14" font-weight="bold" fill="#fff">AgriBot_Firmware.ino</text>
+    <text x="200" y="270" font-size="10.5" fill="#e8f8f0">7-state FSM: INIT → IDLE → PATROL → TARGET_LOCK / OBSTACLE_EVADE / SAFE_MODE / MANUAL_OVERRIDE</text>
+    <text x="200" y="290" font-size="10.5" fill="#d5f5e3">main loop() — non-blocking, polls sensors + flags every cycle</text>
+    <text x="200" y="308" font-size="9" fill="#a9dfbf" font-style="italic">Central orchestrator — calls into Decision Logic and HAL</text>
+
+    <!-- L3 -->
+    <text x="200" y="406" font-size="14" font-weight="bold" fill="#1a1a2e">agribot_logic.h</text>
+    <text x="200" y="426" font-size="11" fill="#2c3e50" font-weight="bold">Pure functions — no hardware access</text>
+    <text x="200" y="444" font-size="10.5" fill="#4a3800">• checkHysteresis() — 2-of-3 weed vote   • computeSteeringCorrection() — P-controller</text>
+    <text x="200" y="460" font-size="10.5" fill="#4a3800">• checkBatteryFault() — 5-read debounce   —   23/23 unit tests passing</text>
+
+    <!-- L4 -->
+    <text x="132" y="544" font-size="11" font-weight="bold" fill="#fff">motor_control.h</text>
+    <text x="132" y="562" font-size="9.5" fill="#fdebd0">DRV8833 /</text>
+    <text x="132" y="578" font-size="9.5" fill="#fdebd0">LEDC PWM</text>
+
+    <text x="324" y="544" font-size="11" font-weight="bold" fill="#fff">sensors.h</text>
+    <text x="324" y="562" font-size="9.5" fill="#fdebd0">VL53L1X x2,</text>
+    <text x="324" y="578" font-size="9.5" fill="#fdebd0">HC-SR04, Bat ADC</text>
+
+    <text x="516" y="544" font-size="11" font-weight="bold" fill="#fff">relay_control.h</text>
+    <text x="516" y="562" font-size="9.5" fill="#fdebd0">pump timer,</text>
+    <text x="516" y="578" font-size="9.5" fill="#fdebd0">esp_timer</text>
+
+    <text x="708" y="544" font-size="11" font-weight="bold" fill="#fff">ml_inference.h</text>
+    <text x="708" y="562" font-size="9.5" fill="#fdebd0">Edge Impulse,</text>
+    <text x="708" y="578" font-size="9.5" fill="#fdebd0">OV2640 96x96</text>
+
+    <text x="900" y="544" font-size="11" font-weight="bold" fill="#fff">pcf8574_driver.h</text>
+    <text x="900" y="562" font-size="9.5" fill="#fdebd0">I2C expander,</text>
+    <text x="900" y="578" font-size="9.5" fill="#fdebd0">shadow register</text>
+
+    <!-- L5 -->
+    <text x="200" y="682" font-size="14" font-weight="bold" fill="#fff">pins.h</text>
+    <text x="200" y="700" font-size="10.5" fill="#d5d8dc">All GPIO numbers · I2C addresses · Constants: CRUISE_SPEED=150, STEERING_KP=0.4,</text>
+    <text x="200" y="714" font-size="10.5" fill="#d5d8dc">OBSTACLE_TRIGGER_CM=20, PUMP_BURST_MS=100, BATT_LOW_VOLTAGE=6.8V</text>
+  </g>
+
+  <!-- ================================================ -->
+  <!-- LEGEND                                             -->
+  <!-- ================================================ -->
+  <g id="legend">
+    <rect x="110" y="755" width="980" height="44" rx="8" fill="#fff" stroke="#bbb" stroke-width="0.8" filter="url(#sh)"/>
+
+    <!-- Red solid -->
+    <line x1="130" y1="777" x2="175" y2="777" stroke="#c0392b" stroke-width="3" marker-end="url(#aRed)"/>
+    <text x="185" y="781" font-size="10" fill="#333">Commands / HW calls</text>
+
+    <!-- Blue solid -->
+    <line x1="370" y1="777" x2="415" y2="777" stroke="#2471a3" stroke-width="3" marker-end="url(#aBlue)"/>
+    <text x="425" y="781" font-size="10" fill="#333">Telemetry</text>
+
+    <!-- Black solid -->
+    <line x1="540" y1="777" x2="585" y2="777" stroke="#222" stroke-width="3" marker-end="url(#aD)"/>
+    <text x="595" y="781" font-size="10" fill="#333">Direct function call</text>
+
+    <!-- Teal dashed -->
+    <line x1="770" y1="777" x2="815" y2="777" stroke="#117a65" stroke-width="2.5" stroke-dasharray="6,3" marker-end="url(#aTeal)"/>
+    <text x="825" y="781" font-size="10" fill="#333">Configuration (pins.h)</text>
+  </g>
+</svg>
