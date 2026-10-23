@@ -30,7 +30,6 @@ The Nile Delta contains **over 63% of Egypt’s cultivated land**, yet smallhold
 
 ## 🛠️ System Architecture
 
-![System Architecture](./images/agribot-vision-architecture.svg)
 
 ```
                   ┌───────────────────────────────────────────────┐
